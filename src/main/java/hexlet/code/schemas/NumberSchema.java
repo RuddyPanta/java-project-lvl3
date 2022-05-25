@@ -2,6 +2,7 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
 
@@ -49,6 +50,9 @@ public final class NumberSchema extends BaseSchema {
                 }
             }
             if (str.equals("positive")) {
+                if (Objects.equals(obj, null)) {
+                    return !check.contains("null");
+                }
                 if ((Integer) obj < 1) {
                     return false;
                 }

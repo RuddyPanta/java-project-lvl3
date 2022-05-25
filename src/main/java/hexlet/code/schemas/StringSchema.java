@@ -9,8 +9,9 @@ public final class StringSchema extends BaseSchema {
     private List<String> dataForCheck = new ArrayList<>();
     private int minLength;
 
-    public void required() {
+    public StringSchema required() {
         check.add("null");
+        return this;
     }
 
     public StringSchema contains(String str) {

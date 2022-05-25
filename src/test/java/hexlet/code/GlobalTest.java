@@ -1,5 +1,7 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
+import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +9,9 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GlobalTest {
 
@@ -92,5 +96,82 @@ public class GlobalTest {
         Assertions.assertEquals(results, expected);
 
         System.out.println("Test NumberSchema is compliant");
+    }
+
+    @Test
+    void testMapSchema() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+        List<Boolean> results = new ArrayList<>();
+
+        results.add(schema.isValid(null)); // true
+
+        schema.required();
+
+        results.add(schema.isValid(null)); // false
+        results.add(schema.isValid(new HashMap())); // true
+        Map<String, String> data = new HashMap<>();
+        data.put("key1", "value1");
+        results.add(schema.isValid(data)); // true
+
+        schema.sizeof(2);
+
+        results.add(schema.isValid(data));  // false
+        data.put("key2", "value2");
+        results.add(schema.isValid(data)); // true
+
+        List<Boolean> expected = new ArrayList<>();
+        expected.add(true);
+        expected.add(false);
+        expected.add(true);
+        expected.add(true);
+        expected.add(false);
+        expected.add(true);
+
+        Assertions.assertEquals(results, expected);
+
+        System.out.println("Test MapSchema is compliant");
+    }
+
+    @Test
+    void testMapSchemaComplicated() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+        List<Boolean> results = new ArrayList<>();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("name", v.string().required());
+        schemas.put("age", v.number().positive());
+        schema.shape(schemas);
+
+        Map<String, Object> human1 = new HashMap<>();
+        human1.put("name", "Kolya");
+        human1.put("age", 100);
+        results.add(schema.isValid(human1)); // true
+
+        Map<String, Object> human2 = new HashMap<>();
+        human2.put("name", "Maya");
+        human2.put("age", null); // true
+        results.add(schema.isValid(human2));
+
+        Map<String, Object> human3 = new HashMap<>();
+        human3.put("name", "");
+        human3.put("age", null);
+        results.add(schema.isValid(human3)); // false
+
+        Map<String, Object> human4 = new HashMap<>();
+        human4.put("name", "Valya");
+        human4.put("age", -5);
+        results.add(schema.isValid(human4)); // false
+
+        List<Boolean> expected = new ArrayList<>();
+        expected.add(true);
+        expected.add(true);
+        expected.add(false);
+        expected.add(false);
+
+        Assertions.assertEquals(results, expected);
+
+        System.out.println("Test MapSchemaComplicated is compliant");
     }
 }
