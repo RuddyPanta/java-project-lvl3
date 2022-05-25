@@ -15,6 +15,15 @@ import java.util.Map;
 
 public class GlobalTest {
 
+    static final int NUM_MINUS_10 = -10;
+    static final int NUM_MINUS_5 = -5;
+    static final int NUM_4 = 4;
+    static final int NUM_5 = 5;
+    static final int NUM_10 = 10;
+    static final int NUM_11 = 11;
+    static final int NUM_50 = 50;
+    static final int NUM_100 = 100;
+
     @Test
     void testStringSchema() {
         Validator v = new Validator();
@@ -35,8 +44,8 @@ public class GlobalTest {
         results.add(schema.contains("whatthe").isValid("what does the fox say")); // false
 
         results.add(schema.isValid("what does the fox say")); // false
-        results.add(schema.minLength(5).isValid("what does the fox say")); // true
-        results.add(schema.minLength(50).isValid("what does the fox say")); // false
+        results.add(schema.minLength(NUM_5).isValid("what does the fox say")); // true
+        results.add(schema.minLength(NUM_50).isValid("what does the fox say")); // false
 
         List<Boolean> expected = new ArrayList<>();
         expected.add(true);
@@ -68,18 +77,18 @@ public class GlobalTest {
         schema.required();
 
         results.add(schema.isValid(null)); // false
-        results.add(schema.isValid(10)); // true
+        results.add(schema.isValid(NUM_10)); // true
         results.add(schema.isValid("5")); // false
 
-        results.add(schema.positive().isValid(10)); // true
-        results.add(schema.isValid(-10)); // false
+        results.add(schema.positive().isValid(NUM_10)); // true
+        results.add(schema.isValid(NUM_MINUS_10)); // false
 
-        schema.range(5, 10);
+        schema.range(NUM_5, NUM_10);
 
-        results.add(schema.isValid(5)); // true
-        results.add(schema.isValid(10)); // true
-        results.add(schema.isValid(4)); // false
-        results.add(schema.isValid(11)); // false
+        results.add(schema.isValid(NUM_5)); // true
+        results.add(schema.isValid(NUM_10)); // true
+        results.add(schema.isValid(NUM_4)); // false
+        results.add(schema.isValid(NUM_11)); // false
 
         List<Boolean> expected = new ArrayList<>();
         expected.add(true);
@@ -146,7 +155,7 @@ public class GlobalTest {
 
         Map<String, Object> human1 = new HashMap<>();
         human1.put("name", "Kolya");
-        human1.put("age", 100);
+        human1.put("age", NUM_100);
         results.add(schema.isValid(human1)); // true
 
         Map<String, Object> human2 = new HashMap<>();
@@ -161,7 +170,7 @@ public class GlobalTest {
 
         Map<String, Object> human4 = new HashMap<>();
         human4.put("name", "Valya");
-        human4.put("age", -5);
+        human4.put("age", NUM_MINUS_5);
         results.add(schema.isValid(human4)); // false
 
         List<Boolean> expected = new ArrayList<>();
