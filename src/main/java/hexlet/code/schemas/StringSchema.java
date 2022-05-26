@@ -31,7 +31,7 @@ public final class StringSchema extends BaseSchema {
         for (Enum anEnum : getChecks()) {
             if (anEnum.equals(Flags.NULL)) {
                 if (obj == null || obj.equals("")) {
-                    System.out.println("ttt");
+
                     return false;
                 }
             }

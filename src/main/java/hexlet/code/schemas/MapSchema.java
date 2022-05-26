@@ -43,7 +43,7 @@ public final class MapSchema extends BaseSchema {
             }
 
             if (note.equals(Flags.SIZE)) {
-                //  HashMap<Object, Object> temp = (HashMap<Object, Object>) obj;
+
                 if (!(tempObj.size() == size)) {
                     return false;
                 }
