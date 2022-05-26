@@ -1,61 +1,59 @@
 package hexlet.code.schemas;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class MapSchema extends BaseSchema {
-    private List<String> check = new ArrayList<>();
+
     private Map<String, BaseSchema> schemas = new HashMap<>();
 
     private int size;
 
     public void required() {
-        check.add("map");
-        check.add("null");
+        setChecks(Flags.MAP);
+        setChecks(Flags.NULL);
     }
 
     public void sizeof(int sizeInn) {
-        check.add("size");
+        setChecks(Flags.SIZE);
         this.size = sizeInn;
     }
 
     public void shape(Map<String, BaseSchema> schemasInn) {
-        check.add("schemas");
+        setChecks(Flags.SCHEMAS);
         this.schemas = schemasInn;
     }
 
-    @Override
     public boolean isValid(Object obj) {
+        HashMap<Object, Object> tempObj = (HashMap<Object, Object>) obj;
 
-        for (String str : check) {
+        for (Enum note : getChecks()) {
 
-            if (str.equals("null")) {
+            if (note.equals(Flags.NULL)) {
                 if (obj == null) {
                     return false;
                 }
             }
 
-            if (str.equals("map")) {
+            if (note.equals(Flags.MAP)) {
                 if (!(obj instanceof Map<?, ?>)) {
                     return false;
                 }
             }
 
-            if (str.equals("size")) {
-                HashMap<Object, Object> temp = (HashMap<Object, Object>) obj;
-                if (!(temp.size() == size)) {
+            if (note.equals(Flags.SIZE)) {
+                //  HashMap<Object, Object> temp = (HashMap<Object, Object>) obj;
+                if (!(tempObj.size() == size)) {
                     return false;
                 }
             }
 
-            if (str.equals("schemas")) {
+            if (note.equals(Flags.SCHEMAS)) {
+
                 StringSchema tempClassStringSchema = (StringSchema) schemas.get("name");
                 NumberSchema tempClassNumberSchema = (NumberSchema) schemas.get("age");
-                HashMap tempObj = (HashMap) obj;
-                tempClassStringSchema.isValid(tempObj.get("name"));
-                tempClassNumberSchema.isValid(tempObj.get("age"));
+
                 return tempClassStringSchema.isValid(tempObj.get("name"))
                         && tempClassNumberSchema.isValid(tempObj.get("age"));
 

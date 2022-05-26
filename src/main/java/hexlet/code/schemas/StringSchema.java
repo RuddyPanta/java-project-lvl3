@@ -5,39 +5,38 @@ import java.util.List;
 
 
 public final class StringSchema extends BaseSchema {
-    private List<String> check = new ArrayList<>();
-    private List<String> dataForCheck = new ArrayList<>();
+    private final List<String> dataForCheck = new ArrayList<>();
     private int minLength;
 
     public StringSchema required() {
-        check.add("null");
+        setChecks(Flags.NULL);
         return this;
     }
 
     public StringSchema contains(String str) {
-        check.add("contains");
+        setChecks(Flags.CONTAINS);
         dataForCheck.add(str);
         return this;
     }
 
     public StringSchema minLength(int minLengthInn) {
-        check.clear();
-        check.add("minLength");
+        clearChecks();
+        setChecks(Flags.MIN_LENGTH);
         this.minLength = minLengthInn;
         return this;
     }
 
-    @Override
     public boolean isValid(Object obj) {
-        for (String str : check) {
-            if (str.equals("null")) {
+
+        for (Enum anEnum : getChecks()) {
+            if (anEnum.equals(Flags.NULL)) {
                 if (obj == null || obj.equals("")) {
+                    System.out.println("ttt");
                     return false;
                 }
-
             }
 
-            if (str.equals("contains")) {
+            if (anEnum.equals(Flags.CONTAINS)) {
 
                 for (String strCheck : dataForCheck) {
                     if (!obj.toString().contains(strCheck)) {
@@ -46,10 +45,10 @@ public final class StringSchema extends BaseSchema {
                 }
             }
 
-            if (str.equals("minLength")) {
+            if (anEnum.equals(Flags.MIN_LENGTH)) {
 
                 if ((obj.toString().length() < minLength)) {
-                    System.out.println(obj.toString().length());
+
                     return false;
                 }
             }

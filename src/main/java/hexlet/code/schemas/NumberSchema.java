@@ -1,57 +1,52 @@
 package hexlet.code.schemas;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
 
-    private List<String> check = new ArrayList<>();
     private int min;
     private int max;
 
     public void required() {
-        check.add("null");
-        check.add("int");
+        setChecks(Flags.NULL);
+        setChecks(Flags.INT);
 
     }
 
     public NumberSchema positive() {
-        check.add("positive");
+        setChecks(Flags.POSITIVE);
         return this;
     }
 
     public void range(int minInn, int maxInn) {
-        check.add("range");
+        setChecks(Flags.RANGE);
         this.min = minInn;
         this.max = maxInn;
 
     }
 
-
-    @Override
     public boolean isValid(Object obj) {
 
-        for (String str : check) {
+        for (Enum node : getChecks()) {
 
-            if (str.equals("range")) {
+            if (node.equals(Flags.RANGE)) {
                 if ((Integer) obj < min || (Integer) obj > max) {
                     return false;
                 }
             }
-            if (str.equals("null")) {
+            if (node.equals(Flags.NULL)) {
                 if (obj == null) {
                     return false;
                 }
             }
-            if (str.equals("int")) {
+            if (node.equals(Flags.INT)) {
                 if (!(obj instanceof Integer)) {
                     return false;
                 }
             }
-            if (str.equals("positive")) {
+            if (node.equals(Flags.POSITIVE)) {
                 if (Objects.equals(obj, null)) {
-                    return !check.contains("null");
+                    return !getChecks().contains(Flags.NULL);
                 }
                 if ((Integer) obj < 1) {
                     return false;
