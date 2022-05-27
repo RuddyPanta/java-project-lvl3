@@ -2,7 +2,6 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class BaseSchema {
 
@@ -23,13 +22,7 @@ public abstract class BaseSchema {
     }
 
     public final boolean isTrueEnum(Enum value) {
-        for (Enum check : checks) {
-            if (Objects.equals(check, value)) {
-                return true;
-            }
-        }
-
-        return false;
+        return checks.contains(value);
     }
 
 
