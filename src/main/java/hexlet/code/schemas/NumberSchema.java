@@ -27,33 +27,22 @@ public final class NumberSchema extends BaseSchema {
 
     public boolean isValid(Object obj) {
 
-        for (Enum node : getChecks()) {
+        if (isTrueEnum(Flags.RANGE) && ((Integer) obj < min || (Integer) obj > max)) {
+            return false;
+        }
 
-            if (node.equals(Flags.RANGE)) {
-                if ((Integer) obj < min || (Integer) obj > max) {
-                    return false;
-                }
-            }
-            if (node.equals(Flags.NULL)) {
-                if (obj == null) {
-                    return false;
-                }
-            }
-            if (node.equals(Flags.INT)) {
-                if (!(obj instanceof Integer)) {
-                    return false;
-                }
-            }
-            if (node.equals(Flags.POSITIVE)) {
-                if (Objects.equals(obj, null)) {
-                    return !getChecks().contains(Flags.NULL);
-                }
-                if ((Integer) obj < 1) {
-                    return false;
-                }
-            }
+        if (isTrueEnum(Flags.NULL) && (Objects.equals(obj, null))) {
+            return false;
+        }
 
+        if (isTrueEnum(Flags.INT) && (!(obj instanceof Integer))) {
+            return false;
+        }
 
+        if (isTrueEnum(Flags.POSITIVE) && (Objects.equals(obj, null))) {
+            return !getChecks().contains(Flags.NULL);
+        } else if (isTrueEnum(Flags.POSITIVE) && ((Integer) obj < 1)) {
+            return false;
         }
 
         return true;

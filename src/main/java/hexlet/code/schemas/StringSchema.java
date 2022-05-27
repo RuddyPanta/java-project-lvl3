@@ -28,35 +28,26 @@ public final class StringSchema extends BaseSchema {
 
     public boolean isValid(Object obj) {
 
-        for (Enum anEnum : getChecks()) {
-            if (anEnum.equals(Flags.NULL)) {
-                if (obj == null || obj.equals("")) {
+        if (isTrueEnum(Flags.NULL) && (obj == null || obj.equals(""))) {
+            return false;
+        }
 
-                    return false;
-                }
-            }
+        if (isTrueEnum(Flags.CONTAINS)) {
 
-            if (anEnum.equals(Flags.CONTAINS)) {
-
-                for (String strCheck : dataForCheck) {
-                    if (!obj.toString().contains(strCheck)) {
-                        return false;
-                    }
-                }
-            }
-
-            if (anEnum.equals(Flags.MIN_LENGTH)) {
-
-                if ((obj.toString().length() < minLength)) {
-
+            for (String strCheck : dataForCheck) {
+                if (!obj.toString().contains(strCheck)) {
                     return false;
                 }
             }
         }
 
-        return true;
-    }
+        if (isTrueEnum(Flags.MIN_LENGTH) && (obj.toString().length() < minLength)) {
+            return false;
 
+        }
+        return true;
+
+    }
 
 }
 

@@ -3,6 +3,7 @@ package hexlet.code.schemas;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class MapSchema extends BaseSchema {
 
@@ -28,36 +29,24 @@ public final class MapSchema extends BaseSchema {
     public boolean isValid(Object obj) {
         HashMap<Object, Object> tempObj = (HashMap<Object, Object>) obj;
 
-        for (Enum note : getChecks()) {
+        if (isTrueEnum(Flags.NULL) && Objects.equals(obj, null)) {
+            return false;
+        }
 
-            if (note.equals(Flags.NULL)) {
-                if (obj == null) {
-                    return false;
-                }
-            }
+        if (isTrueEnum(Flags.MAP) && (!(obj instanceof Map<?, ?>))) {
+            return false;
+        }
 
-            if (note.equals(Flags.MAP)) {
-                if (!(obj instanceof Map<?, ?>)) {
-                    return false;
-                }
-            }
+        if (isTrueEnum(Flags.SIZE) && (!(tempObj.size() == size))) {
+            return false;
+        }
 
-            if (note.equals(Flags.SIZE)) {
+        if (isTrueEnum(Flags.SCHEMAS)) {
+            StringSchema tempClassStringSchema = (StringSchema) schemas.get("name");
+            NumberSchema tempClassNumberSchema = (NumberSchema) schemas.get("age");
 
-                if (!(tempObj.size() == size)) {
-                    return false;
-                }
-            }
-
-            if (note.equals(Flags.SCHEMAS)) {
-
-                StringSchema tempClassStringSchema = (StringSchema) schemas.get("name");
-                NumberSchema tempClassNumberSchema = (NumberSchema) schemas.get("age");
-
-                return tempClassStringSchema.isValid(tempObj.get("name"))
-                        && tempClassNumberSchema.isValid(tempObj.get("age"));
-
-            }
+            return tempClassStringSchema.isValid(tempObj.get("name"))
+                    && tempClassNumberSchema.isValid(tempObj.get("age"));
         }
 
         return true;

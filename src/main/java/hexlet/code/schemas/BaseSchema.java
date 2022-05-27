@@ -2,8 +2,12 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BaseSchema {
+
+    private final List<Enum> checks = new ArrayList<>();
+
     public abstract boolean isValid(Object obj);
 
     public final List<Enum> getChecks() {
@@ -18,7 +22,16 @@ public abstract class BaseSchema {
         checks.clear();
     }
 
-    private final List<Enum> checks = new ArrayList<>();
+    public final boolean isTrueEnum(Enum value) {
+        for (Enum check : checks) {
+            if (Objects.equals(check, value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 }
 
