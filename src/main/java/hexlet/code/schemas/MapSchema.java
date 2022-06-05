@@ -12,43 +12,33 @@ public final class MapSchema extends BaseSchema {
     private int size;
 
     public void required() {
-        setChecks(Flags.MAP);
-        setChecks(Flags.NULL);
+        setPredicates(x -> !Objects.equals(x, null) && x instanceof Map<?, ?>);
     }
 
     public void sizeof(int sizeInn) {
-        setChecks(Flags.SIZE);
+        setPredicates(x -> {
+            HashMap<Object, Object> xInn = (HashMap<Object, Object>) x;
+            return xInn.size() == size;
+        });
         this.size = sizeInn;
     }
 
     public void shape(Map<String, BaseSchema> schemasInn) {
-        setChecks(Flags.SCHEMAS);
+
+        setPredicates(x -> {
+
+            HashMap<Object, Object> xInn = (HashMap<Object, Object>) x;
+
+            StringSchema tempClassStringSchema = (StringSchema) schemas.get("name");
+            NumberSchema tempClassNumberSchema = (NumberSchema) schemas.get("age");
+
+            return tempClassStringSchema.isValid(xInn.get("name"))
+                    && tempClassNumberSchema.isValid(xInn.get("age"));
+        });
         this.schemas = schemasInn;
     }
 
     public boolean isValid(Object obj) {
-        HashMap<Object, Object> tempObj = (HashMap<Object, Object>) obj;
-
-        if (isTrueEnum(Flags.NULL) && Objects.equals(obj, null)) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.MAP) && (!(obj instanceof Map<?, ?>))) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.SIZE) && (!(tempObj.size() == size))) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.SCHEMAS)) {
-            StringSchema tempClassStringSchema = (StringSchema) schemas.get("name");
-            NumberSchema tempClassNumberSchema = (NumberSchema) schemas.get("age");
-
-            return tempClassStringSchema.isValid(tempObj.get("name"))
-                    && tempClassNumberSchema.isValid(tempObj.get("age"));
-        }
-
-        return true;
+        return getPredicates().stream().allMatch(x -> x.test(obj));
     }
 }

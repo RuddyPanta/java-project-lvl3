@@ -2,51 +2,45 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public final class StringSchema extends BaseSchema {
     private final List<String> dataForCheck = new ArrayList<>();
     private int minLength;
 
+
+
     public StringSchema required() {
-        setChecks(Flags.NULL);
+        setPredicates(x -> !Objects.equals(x, null) && !Objects.equals(x, ""));
         return this;
     }
 
     public StringSchema contains(String str) {
-        setChecks(Flags.CONTAINS);
+
+        setPredicates(x -> {
+            if (!Objects.equals(x, null)) {
+                for (String strCheck : dataForCheck) {
+                    if (!x.toString().contains(strCheck)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
         dataForCheck.add(str);
         return this;
     }
 
     public StringSchema minLength(int minLengthInn) {
-        clearChecks();
-        setChecks(Flags.MIN_LENGTH);
+        predicatesClear();
+        setPredicates(x -> x.toString().length() >= this.minLength);
         this.minLength = minLengthInn;
         return this;
     }
 
     public boolean isValid(Object obj) {
-
-        if (isTrueEnum(Flags.NULL) && (obj == null || obj.equals(""))) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.CONTAINS)) {
-
-            for (String strCheck : dataForCheck) {
-                if (!obj.toString().contains(strCheck)) {
-                    return false;
-                }
-            }
-        }
-
-        if (isTrueEnum(Flags.MIN_LENGTH) && (obj.toString().length() < minLength)) {
-            return false;
-
-        }
-        return true;
-
+        return getPredicates().stream().allMatch(x -> x.test(obj));
     }
 
 }

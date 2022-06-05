@@ -1,30 +1,25 @@
 package hexlet.code.schemas;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
 
 public abstract class BaseSchema {
-
-    private final List<Enum> checks = new ArrayList<>();
-
     public abstract boolean isValid(Object obj);
 
-    public final List<Enum> getChecks() {
-        return checks;
+    public final List<Predicate<Object>> getPredicates() {
+        return predicates;
     }
 
-    public final void setChecks(Enum check) {
-        checks.add(check);
+    public final void setPredicates(Predicate<Object> predicate) {
+        this.predicates.add(predicate);
     }
 
-    public final void clearChecks() {
-        checks.clear();
+    public final void predicatesClear() {
+        predicates.clear();
     }
 
-    public final boolean isTrueEnum(Enum value) {
-        return checks.contains(value);
-    }
-
-
+    private List<Predicate<Object>> predicates = new ArrayList<>();
 }
-

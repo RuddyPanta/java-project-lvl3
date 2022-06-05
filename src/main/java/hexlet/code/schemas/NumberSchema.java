@@ -8,44 +8,23 @@ public final class NumberSchema extends BaseSchema {
     private int max;
 
     public void required() {
-        setChecks(Flags.NULL);
-        setChecks(Flags.INT);
-
+        setPredicates(x -> x instanceof Integer);
     }
 
     public NumberSchema positive() {
-        setChecks(Flags.POSITIVE);
+        setPredicates(x -> Objects.equals(x, null) || (Integer) x > 0);
         return this;
     }
 
     public void range(int minInn, int maxInn) {
-        setChecks(Flags.RANGE);
-        this.min = minInn;
+        setPredicates(x -> (Integer) x >= this.min && (Integer) x <= this.max);
         this.max = maxInn;
-
+        this.min = minInn;
     }
 
+    @Override
     public boolean isValid(Object obj) {
-
-        if (isTrueEnum(Flags.RANGE) && ((Integer) obj < min || (Integer) obj > max)) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.NULL) && (Objects.equals(obj, null))) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.INT) && (!(obj instanceof Integer))) {
-            return false;
-        }
-
-        if (isTrueEnum(Flags.POSITIVE) && (Objects.equals(obj, null))) {
-            return !getChecks().contains(Flags.NULL);
-        } else if (isTrueEnum(Flags.POSITIVE) && ((Integer) obj < 1)) {
-            return false;
-        }
-
-        return true;
+        return getPredicates().stream().allMatch(x -> x.test(obj));
     }
 }
 
