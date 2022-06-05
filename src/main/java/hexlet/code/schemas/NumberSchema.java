@@ -12,12 +12,12 @@ public final class NumberSchema extends BaseSchema {
     }
 
     public NumberSchema positive() {
-        setPredicates(x -> Objects.equals(x, null) || (Integer) x > 0);
+        setPredicates(x -> Objects.equals(x, null) || x instanceof Integer && (Integer) x > 0);
         return this;
     }
 
     public void range(int minInn, int maxInn) {
-        setPredicates(x -> (Integer) x >= this.min && (Integer) x <= this.max);
+        setPredicates(x -> x instanceof Integer && (Integer) x >= this.min && (Integer) x <= this.max);
         this.max = maxInn;
         this.min = minInn;
     }
