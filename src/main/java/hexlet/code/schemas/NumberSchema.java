@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
 
-    private int min;
-    private int max;
+  //  private int min;
+  //  private int max;
 
     public void required() {
         setPredicates(x -> x instanceof Integer);
@@ -16,15 +16,10 @@ public final class NumberSchema extends BaseSchema {
         return this;
     }
 
-    public void range(int minInn, int maxInn) {
-        setPredicates(x -> x instanceof Integer && (Integer) x >= this.min && (Integer) x <= this.max);
-        this.max = maxInn;
-        this.min = minInn;
-    }
-
-    @Override
-    public boolean isValid(Object obj) {
-        return getPredicates().stream().allMatch(x -> x.test(obj));
+    public void range(int min, int max) {
+        setPredicates(x -> x instanceof Integer && (Integer) x >= min && (Integer) x <= max);
+//        this.max = max;
+//        this.min = min;
     }
 }
 

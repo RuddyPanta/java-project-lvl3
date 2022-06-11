@@ -6,43 +6,22 @@ import java.util.Objects;
 
 
 public final class StringSchema extends BaseSchema {
-    private final List<String> dataForCheck = new ArrayList<>();
-    private int minLength;
-
-
-
-    public StringSchema required() {
-        setPredicates(x -> !Objects.equals(x, null) && !Objects.equals(x, ""));
+     public StringSchema required() {
+        setPredicates(x -> x != null && !x.toString().isEmpty());
         return this;
     }
 
     public StringSchema contains(String str) {
 
-        setPredicates(x -> {
-            if (!Objects.equals(x, null)) {
-                for (String strCheck : dataForCheck) {
-                    if (!x.toString().contains(strCheck)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        });
-        dataForCheck.add(str);
+        setPredicates(x -> x == null || x.toString().contains(str));
         return this;
     }
 
-    public StringSchema minLength(int minLengthInn) {
+    public StringSchema minLength(int minLength) {
         predicatesClear();
-        setPredicates(x -> x.toString().length() >= this.minLength);
-        this.minLength = minLengthInn;
+        setPredicates(x -> x.toString().length() >= minLength);
         return this;
     }
-
-    public boolean isValid(Object obj) {
-        return getPredicates().stream().allMatch(x -> x.test(obj));
-    }
-
 }
 
 

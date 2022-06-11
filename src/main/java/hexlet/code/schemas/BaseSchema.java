@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 
-public abstract class BaseSchema {
-    public abstract boolean isValid(Object obj);
-
-    public final List<Predicate<Object>> getPredicates() {
-        return predicates;
+public class BaseSchema {
+    public boolean isValid(Object obj) {
+        return predicates.stream().allMatch(x -> x.test(obj));
     }
 
     public final void setPredicates(Predicate<Object> predicate) {
@@ -21,5 +19,5 @@ public abstract class BaseSchema {
         predicates.clear();
     }
 
-    private List<Predicate<Object>> predicates = new ArrayList<>();
+    private final List<Predicate<Object>> predicates = new ArrayList<>();
 }

@@ -19,6 +19,7 @@ public class GlobalTest {
     static final int NUM_MINUS_5 = -5;
     static final int NUM_4 = 4;
     static final int NUM_5 = 5;
+    static final int NUM_6 = 6;
     static final int NUM_10 = 10;
     static final int NUM_11 = 11;
     static final int NUM_50 = 50;
@@ -90,6 +91,10 @@ public class GlobalTest {
         results.add(schema.isValid(NUM_4)); // false
         results.add(schema.isValid(NUM_11)); // false
 
+        schema.range(NUM_6, NUM_10);
+
+        results.add(schema.isValid(NUM_5)); // false
+
         List<Boolean> expected = new ArrayList<>();
         expected.add(true);
         expected.add(false);
@@ -99,6 +104,7 @@ public class GlobalTest {
         expected.add(false);
         expected.add(true);
         expected.add(true);
+        expected.add(false);
         expected.add(false);
         expected.add(false);
 

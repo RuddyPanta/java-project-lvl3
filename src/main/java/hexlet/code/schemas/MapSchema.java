@@ -37,8 +37,4 @@ public final class MapSchema extends BaseSchema {
         });
         this.schemas = schemasInn;
     }
-
-    public boolean isValid(Object obj) {
-        return getPredicates().stream().allMatch(x -> x.test(obj));
-    }
 }
