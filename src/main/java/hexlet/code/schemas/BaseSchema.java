@@ -15,9 +15,5 @@ public class BaseSchema {
         this.predicates.add(predicate);
     }
 
-    public final void predicatesClear() {
-        predicates.clear();
-    }
-
     private final List<Predicate<Object>> predicates = new ArrayList<>();
 }
