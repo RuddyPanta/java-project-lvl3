@@ -45,8 +45,11 @@ public class GlobalTest {
         results.add(schema.contains("whatthe").isValid("what does the fox say")); // false
 
         results.add(schema.isValid("what does the fox say")); // false
-        results.add(schema.minLength(NUM_5).isValid("what does the fox say")); // true
-        results.add(schema.minLength(NUM_50).isValid("what does the fox say")); // false
+        schema.minLength(NUM_5);
+        results.add(schema.isValid("what does the fox say")); // false
+        // хотя условие при 5ти дает true общий ответ false из-за условий выше
+        schema.minLength(NUM_50);
+        results.add(schema.isValid("what does the fox say")); // false
 
         List<Boolean> expected = new ArrayList<>();
         expected.add(true);
@@ -58,7 +61,7 @@ public class GlobalTest {
         expected.add(true);
         expected.add(false);
         expected.add(false);
-        expected.add(true);
+        expected.add(false);
         expected.add(false);
 
         Assertions.assertEquals(results, expected);

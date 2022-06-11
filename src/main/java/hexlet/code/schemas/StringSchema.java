@@ -7,15 +7,12 @@ public final class StringSchema extends BaseSchema {
     }
 
     public StringSchema contains(String str) {
-
         setPredicates(x -> x == null || x.toString().contains(str));
         return this;
     }
 
-    public StringSchema minLength(int minLength) {
-        predicatesClear();
+    public void minLength(int minLength) {
         setPredicates(x -> x.toString().length() >= minLength);
-        return this;
     }
 }
 
