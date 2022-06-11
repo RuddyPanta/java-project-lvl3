@@ -1,20 +1,26 @@
 ### Hexlet tests and linter status:
+
 [![Actions Status](https://github.com/RuddyPanta/java-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/RuddyPanta/java-project-lvl3/actions)
 
-
 [![GitHub Actions Demo](https://github.com/RuddyPanta/java-project-lvl3/actions/workflows/github-actions-demo.yml/badge.svg)](https://github.com/RuddyPanta/java-project-lvl3/actions/workflows/github-actions-demo.yml)
-
-
 
 <a href="https://codeclimate.com/github/RuddyPanta/java-project-lvl3/maintainability"><img src="https://api.codeclimate.com/v1/badges/c1bd5e6bdba2f2d96789/maintainability" /></a>
 <a href="https://codeclimate.com/github/RuddyPanta/java-project-lvl3/test_coverage"><img src="https://api.codeclimate.com/v1/badges/c1bd5e6bdba2f2d96789/test_coverage" /></a>
 
+<body>
 
-<h1>Программа валидирует данные по критериям</h1>
+<h1>
+Программа валидирует данные по критериям
+</h1>
 
-<h3>проверяет строковые данные, числовые и map обьекты,<br> а также внутренние данные HashMap состоящие из String и Integer</h3>
+<h3>
+проверяет строковые данные, числовые и map обьекты,<br>
+а также внутренние данные HashMap состоящие из String и Integer
+</h3>
 
-<h3> пример String данных:</h3>
+<h3>
+пример String данных:
+</h3>
 
 <pre class="box">
 Validator v = new Validator();
@@ -37,14 +43,7 @@ schema.contains("whatthe").isValid("what does the fox say"); // false
 schema.isValid("what does the fox say"); // false
 // уже false, так как добавлена ещё одна проверка contains("whatthe")
 </pre>
-<style>
-.box {
-  color: #0000FF;
-  border: 4px double black; /* Параметры границы */
-    background: #E6E6FA; /* Цвет фона */
-    padding: 10px; /* Поля вокруг текста */
-}
-</style>
+
 <h3>пример Integer данных:</h3>
 
 <pre class="box">
@@ -125,3 +124,4 @@ human4.put("name", "Valya");
 human4.put("age", -5);
 schema.isValid(human4); // false
 </pre>
+</body>
