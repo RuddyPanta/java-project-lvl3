@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 
 public class BaseSchema {
-    public boolean isValid(Object obj) {
+    public final boolean isValid(Object obj) {
         return predicates.stream().allMatch(x -> x.test(obj));
     }
 

@@ -1,12 +1,7 @@
 package hexlet.code.schemas;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-
 public final class StringSchema extends BaseSchema {
-     public StringSchema required() {
+    public StringSchema required() {
         setPredicates(x -> x != null && !x.toString().isEmpty());
         return this;
     }

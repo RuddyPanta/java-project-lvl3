@@ -4,9 +4,6 @@ import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
 
-  //  private int min;
-  //  private int max;
-
     public void required() {
         setPredicates(x -> x instanceof Integer);
     }
@@ -18,8 +15,6 @@ public final class NumberSchema extends BaseSchema {
 
     public void range(int min, int max) {
         setPredicates(x -> x instanceof Integer && (Integer) x >= min && (Integer) x <= max);
-//        this.max = max;
-//        this.min = min;
     }
 }
 
