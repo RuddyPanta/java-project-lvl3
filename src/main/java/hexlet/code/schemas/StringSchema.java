@@ -11,8 +11,9 @@ public final class StringSchema extends BaseSchema {
         return this;
     }
 
-    public void minLength(int minLength) {
+    public StringSchema minLength(int minLength) {
         setPredicates(x -> x.toString().length() >= minLength);
+        return this;
     }
 }
 

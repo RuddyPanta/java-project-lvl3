@@ -2,39 +2,35 @@ package hexlet.code.schemas;
 
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
 public final class MapSchema extends BaseSchema {
 
-    private Map<String, BaseSchema> schemas = new HashMap<>();
 
-    private int size;
-
-    public void required() {
+    public MapSchema required() {
         setPredicates(x -> !Objects.equals(x, null) && x instanceof Map<?, ?>);
+        return this;
     }
 
-    public void sizeof(int sizeInn) {
-        setPredicates(x -> {
-            HashMap<Object, Object> xInn = (HashMap<Object, Object>) x;
-            return xInn.size() == size;
-        });
-        this.size = sizeInn;
+    public MapSchema sizeof(int sizeInn) {
+        setPredicates(x -> ((HashMap<Object, Object>) x).size() == sizeInn);
+        return this;
     }
 
-    public void shape(Map<String, BaseSchema> schemasInn) {
+    public MapSchema shape(Map<String, BaseSchema> schemasInn) {
 
         setPredicates(x -> {
 
-            HashMap<Object, Object> xInn = (HashMap<Object, Object>) x;
+            List<Boolean> b = new ArrayList<>();
+            schemasInn.forEach((k, v) -> {
+                b.add(v.isValid(((HashMap<?, ?>) x).get(k)));
+            });
 
-            StringSchema tempClassStringSchema = (StringSchema) schemas.get("name");
-            NumberSchema tempClassNumberSchema = (NumberSchema) schemas.get("age");
-
-            return tempClassStringSchema.isValid(xInn.get("name"))
-                    && tempClassNumberSchema.isValid(xInn.get("age"));
+            return !b.contains(false);
         });
-        this.schemas = schemasInn;
+        return this;
     }
 }

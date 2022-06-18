@@ -160,31 +160,43 @@ public class GlobalTest {
         Map<String, BaseSchema> schemas = new HashMap<>();
         schemas.put("name", v.string().required());
         schemas.put("age", v.number().positive());
+        schemas.put("city", v.string().required().minLength(5));
         schema.shape(schemas);
 
         Map<String, Object> human1 = new HashMap<>();
         human1.put("name", "Kolya");
         human1.put("age", NUM_100);
+        human1.put("city", "Jerusalim");
         results.add(schema.isValid(human1)); // true
 
         Map<String, Object> human2 = new HashMap<>();
         human2.put("name", "Maya");
         human2.put("age", null); // true
+        human2.put("city", "Jerusalim");
         results.add(schema.isValid(human2));
 
         Map<String, Object> human3 = new HashMap<>();
         human3.put("name", "");
         human3.put("age", null);
+        human3.put("city", "Jerusalim");
         results.add(schema.isValid(human3)); // false
 
         Map<String, Object> human4 = new HashMap<>();
         human4.put("name", "Valya");
         human4.put("age", NUM_MINUS_5);
+        human4.put("city", "Jerusalim");
+        results.add(schema.isValid(human4)); // false
+
+        Map<String, Object> human5 = new HashMap<>();
+        human5.put("name", "Valya");
+        human5.put("age", null);
+        human5.put("city", "Akko");
         results.add(schema.isValid(human4)); // false
 
         List<Boolean> expected = new ArrayList<>();
         expected.add(true);
         expected.add(true);
+        expected.add(false);
         expected.add(false);
         expected.add(false);
 

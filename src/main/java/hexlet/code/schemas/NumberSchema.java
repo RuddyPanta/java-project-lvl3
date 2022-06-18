@@ -4,8 +4,9 @@ import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
 
-    public void required() {
+    public NumberSchema required() {
         setPredicates(x -> x instanceof Integer);
+        return this;
     }
 
     public NumberSchema positive() {
@@ -13,8 +14,9 @@ public final class NumberSchema extends BaseSchema {
         return this;
     }
 
-    public void range(int min, int max) {
+    public NumberSchema range(int min, int max) {
         setPredicates(x -> x instanceof Integer && (Integer) x >= min && (Integer) x <= max);
+        return this;
     }
 }
 
